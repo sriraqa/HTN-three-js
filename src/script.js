@@ -116,32 +116,46 @@ const box = new THREE.Mesh(boxGeometry,material)
 const cylinder = new THREE.Mesh(cylinderGeometry,material)
 const text = new THREE.Mesh(textGeometry,material)
 
+let objOnScreen = false;
+let clickCount = 0;
+
 function onButtonClick(event) {
     if(event.target.id == 'sphere')
     {
         scene.add(sphere)
+        objOnScreen = true;
+        clickCount = 1;
     }
     else if(event.target.id == 'cone')
     {
         scene.add(cone)
+        objOnScreen = true;
+        clickCount = 1;
     }
     else if(event.target.id == 'box')
     {
         scene.add(box)
+        objOnScreen = true;
+        clickCount = 1;
     }
     else if(event.target.id == 'cylinder')
     {
         scene.add(cylinder)
+        objOnScreen = true;
+        clickCount = 1;
     }
     else if(event.target.id == 'text')
     {
         scene.add(text)
+        objOnScreen = true;
+        clickCount = 1;
     }
     else if(event.target.id == 'clear')
     {
         while (scene.children.length > 4) {
             scene.remove(scene.children[scene.children.length - 1]);
         }
+        objOnScreen = false;
     }
 }
 
@@ -169,21 +183,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  angle += 0.01;
  }
 
-document.addEventListener('mousemove', onDocumentMouseMove)
-
 const a = new THREE.Vector3(0, 0, 0);
-
-sphere.position.x = 0
-sphere.position.y = 0
-sphere.position.z = 0
 
 let mouseX = 0
 let mouseY = 0
 
 let targetX = 0
 let targetY = 0
-
-let clicked = false
 
 var vec = new THREE.Vector3(); // create once and reuse
 var pos = new THREE.Vector3(); // create once and reuse
@@ -192,86 +198,49 @@ function checkFunction() {
     material.color = new THREE.Color(0xffffff)
 }
 
+// alert(scene.children[])
+let clicked = false
+
+document.addEventListener('mousemove', onDocumentMouseMove)
+
 function onDocumentMouseMove(event) {
-    // mouseX = ( event.clientX / window.innerWidth ) * 2 - 1
-    // mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1
-}
 
-const updateSphere = (event) => {
-    if(clicked == false)
+    if(objOnScreen == true)
     {
-        // vec.set(
-        //     ( event.clientX / window.innerWidth ) * 2 - 1,
-        //     - ( event.clientY / window.innerHeight ) * 2 + 1,
-        //     0.5 );
-        
-        // vec.unproject( camera );
-        
-        // vec.sub( camera.position ).normalize();
-        
-        // var distance = ( targetZ - camera.position.z ) / vec.z;
-        
-        // pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
-
-        mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
-        mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
+        const updateChild = (event) => {
+            if(clicked == false)
+            {
+                mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
+                mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
+            
+                scene.children[scene.children.length - 1].position.x = mouseX
+                scene.children[scene.children.length - 1].position.y = mouseY
+                scene.children[scene.children.length - 1].position.z = 0
+            }
+        }
     
-        sphere.position.x = mouseX
-        sphere.position.y = mouseY
-        sphere.position.z = 0
+        window.addEventListener('mousemove', updateChild)
     }
 }
 
-const updateBox = (event) => {
-    if(clicked == false)
+document.addEventListener('click', onDocumentClick)
+
+function onDocumentClick(event) {
+    clicked = false;
+
+    if(objOnScreen == true && clickCount == 2)
     {
         mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
         mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
-    
-        box.position.x = mouseX
-        box.position.y = mouseY
-        box.position.z = 0
+ 
+        scene.children[scene.children.length - 1].position.x = mouseX
+        scene.children[scene.children.length - 1].position.y = mouseY
+        scene.children[scene.children.length - 1].position.z = 0
+
+        clicked = true;
     }
+    clickCount = 2;
 }
-
-const clickSphere = (event) => {
-    mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
-    mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
-
-    console.log('x', mouseX)
-    console.log('y', mouseY)
-
-    if(clicked == false)
-    {    
-        sphere.position.x = mouseX
-        sphere.position.y = mouseY
-        sphere.position.z = 0
-    }
-
-    clicked = true
-}
-
-const clickBox = (event) => {
-    mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
-    mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
-
-    console.log('x', mouseX)
-    console.log('y', mouseY)
-
-    if(clicked == false)
-    {    
-        box.position.x = mouseX
-        box.position.y = mouseY
-        box.position.z = 0
-    }
-
-    clicked = true
-}
-
-window.addEventListener('mousemove', updateSphere)
-window.addEventListener('click', clickSphere)
-window.addEventListener('mousemove', updateBox)
-window.addEventListener('click', clickBox)
 
 const clock = new THREE.Clock()
 

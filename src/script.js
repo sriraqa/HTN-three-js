@@ -117,38 +117,38 @@ const cylinder = new THREE.Mesh(cylinderGeometry,material)
 const text = new THREE.Mesh(textGeometry,material)
 
 let objOnScreen = false;
-let clickCount = 0;
+let clickState = 0; //initial state
 
 function onButtonClick(event) {
     if(event.target.id == 'sphere')
     {
         scene.add(sphere)
         objOnScreen = true;
-        clickCount = 1;
+        clickState = 1; //spawned item
     }
     else if(event.target.id == 'cone')
     {
         scene.add(cone)
         objOnScreen = true;
-        clickCount = 1;
+        clickState = 1;
     }
     else if(event.target.id == 'box')
     {
         scene.add(box)
         objOnScreen = true;
-        clickCount = 1;
+        clickState = 1;
     }
     else if(event.target.id == 'cylinder')
     {
         scene.add(cylinder)
         objOnScreen = true;
-        clickCount = 1;
+        clickState = 1;
     }
     else if(event.target.id == 'text')
     {
         scene.add(text)
         objOnScreen = true;
-        clickCount = 1;
+        clickState = 1;
     }
     else if(event.target.id == 'clear')
     {
@@ -205,30 +205,21 @@ document.addEventListener('mousemove', onDocumentMouseMove)
 
 function onDocumentMouseMove(event) {
 
-    if(objOnScreen == true)
+    if(clickState == 2)
     {
-        const updateChild = (event) => {
-            if(clicked == false)
-            {
-                mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
-                mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
-            
-                scene.children[scene.children.length - 1].position.x = mouseX
-                scene.children[scene.children.length - 1].position.y = mouseY
-                scene.children[scene.children.length - 1].position.z = 0
-            }
-        }
+        mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
+        mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
     
-        window.addEventListener('mousemove', updateChild)
+        scene.children[scene.children.length - 1].position.x = mouseX
+        scene.children[scene.children.length - 1].position.y = mouseY
+        scene.children[scene.children.length - 1].position.z = 0
     }
 }
 
 document.addEventListener('click', onDocumentClick)
 
 function onDocumentClick(event) {
-    clicked = false;
-
-    if(objOnScreen == true && clickCount == 2)
+    if(clickState == 2) //placed object on plane
     {
         mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
         mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
@@ -237,9 +228,11 @@ function onDocumentClick(event) {
         scene.children[scene.children.length - 1].position.y = mouseY
         scene.children[scene.children.length - 1].position.z = 0
 
-        clicked = true;
+        clickState = 0; //finished state
     }
-    clickCount = 2;
+    else if(clickState == 1) {
+        clickState = 2;
+    }
 }
 
 const clock = new THREE.Clock()

@@ -8,9 +8,23 @@ html,
 body
 {
     height: 100vh;
-    font-family: 'Poppins';
+    font-family: 'Open Sans';
+    font-family: 'Roboto';
     background: rgba(234, 255, 254, 0);
 }
+
+table {
+    font-family: 'Open Sans';
+    font-family: 'Roboto';
+    border-collapse: collapse;
+    width: 10%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
 
 .webgl
 {

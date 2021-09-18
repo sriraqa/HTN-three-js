@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 
 // Loading
 const textureLoader = new THREE.TextureLoader()
@@ -19,7 +20,7 @@ const scene = new THREE.Scene()
 
 // Objects (base)
 const geometry1 = new THREE.PlaneGeometry( 20, 20 );
-const geometry2 = new THREE.SphereBufferGeometry(3, 64, 64)
+const geometry2 = new THREE.SphereBufferGeometry(2, 64, 64)
 
 // Materials (skin)
 
@@ -34,17 +35,20 @@ scene.add(plane)
 const sphere = new THREE.Mesh(geometry2,material)
 scene.add(sphere)
 
+// const radius = gui.radius;
+
+// const sphere1 = gui.addFolder('Sphere 1')
+// sphere1.add(sphere, 'radius').min(1).max(4).step(0.01)
+
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 1.5)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
+const pointLight = new THREE.PointLight(0xffffff, 2)
+pointLight.position.set(-20, -20, 50)
 scene.add(pointLight)
 
-const pointLight2 = new THREE.PointLight(0xff0000, 2)
-pointLight2.position.set(-0.62, 0.99, 0.47)
-pointLight2.intensity = 0.75
+const pointLight2 = new THREE.PointLight(0xffffff, 2)
+pointLight2.position.set(50, 50, 50)
+pointLight2.intensity = 2
 scene.add(pointLight2)
 
 const light1 = gui.addFolder('Light 1')
@@ -55,7 +59,7 @@ light1.add(pointLight2.position, 'z').min(-3).max(3).step(0.01)
 light1.add(pointLight2, 'intensity').min(0).max(10).step(0.01)
 
 const light1Color = {
-    color: 0xff0000
+    color: 0xffffff
 }
 
 light1.addColor(light1Color, 'color')
@@ -95,20 +99,8 @@ window.addEventListener('resize', () =>
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 
-var camera_pivot = new THREE.Object3D()
-var Y_AXIS = new THREE.Vector3( 0, 1, 0 );
-
-scene.add( camera_pivot );
-camera_pivot.add( camera );
-camera.position.set( 0,-15,8);
-camera.lookAt( camera_pivot.position );
-camera_pivot.rotateOnAxis( Y_AXIS, 0.01 );    // radians
-
-// camera.position.x = 0
-// camera.position.y = 0
-// camera.position.z = 1.5
-// camera.position.set(0,-15,8); // Set position like this
-// camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
+camera.position.set(0,-15,8); // Set position like this
+camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
 scene.add(camera)
 
 // Controls
@@ -128,6 +120,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
+
+ var angle = 0;
+ var radius = 500; 
+ 
+ function animate() {
+ // Use Math.cos and Math.sin to set camera X and Z values based on angle. 
+ camera.position.x = radius * Math.cos( angle );  
+ camera.position.z = radius * Math.sin( angle );
+ angle += 0.01;
+ }
 
 document.addEventListener('mousemove', onDocumentMouseMove)
 
@@ -179,11 +181,14 @@ const updateSphere = (event) => {
 }
 
 const clickSphere = (event) => {
+    mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
+    mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
+
+    console.log('x', mouseX)
+    console.log('y', mouseY)
+
     if(clicked == false)
-    {
-        mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
-        mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
-    
+    {    
         sphere.position.x = mouseX
         sphere.position.y = mouseY
         sphere.position.z = 0

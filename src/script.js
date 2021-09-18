@@ -110,42 +110,41 @@ camera.position.set(0,-15,8); // Set position like this
 camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
 scene.add(camera)
 
-const sphere = new THREE.Mesh(sphereGeometry,material)
-const cone = new THREE.Mesh(coneGeometry,material)
-const box = new THREE.Mesh(boxGeometry,material)
-const cylinder = new THREE.Mesh(cylinderGeometry,material)
-const text = new THREE.Mesh(textGeometry,material)
-
 let objOnScreen = false;
 let clickState = 0; //initial state
 
 function onButtonClick(event) {
     if(event.target.id == 'sphere')
     {
+        const sphere = new THREE.Mesh(sphereGeometry,material)
         scene.add(sphere)
         objOnScreen = true;
         clickState = 1; //spawned item
     }
     else if(event.target.id == 'cone')
     {
+        const cone = new THREE.Mesh(coneGeometry,material)
         scene.add(cone)
         objOnScreen = true;
         clickState = 1;
     }
     else if(event.target.id == 'box')
     {
+        const box = new THREE.Mesh(boxGeometry,material)
         scene.add(box)
         objOnScreen = true;
         clickState = 1;
     }
     else if(event.target.id == 'cylinder')
     {
+        const cylinder = new THREE.Mesh(cylinderGeometry,material)
         scene.add(cylinder)
         objOnScreen = true;
         clickState = 1;
     }
     else if(event.target.id == 'text')
     {
+        const text = new THREE.Mesh(textGeometry,material)
         scene.add(text)
         objOnScreen = true;
         clickState = 1;

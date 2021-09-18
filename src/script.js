@@ -20,7 +20,16 @@ const scene = new THREE.Scene()
 
 // Objects (base)
 const geometry1 = new THREE.PlaneGeometry( 20, 20 );
-const geometry2 = new THREE.SphereBufferGeometry(2, 64, 64)
+const sphereGeometry = new THREE.SphereBufferGeometry(2, 64, 64)
+const coneGeometry = new THREE.ConeBufferGeometry(2, 4, 64, 64)
+const boxGeometry = new THREE.BoxBufferGeometry(2, 2)
+const cylinderGeometry = new THREE.CylinderBufferGeometry(2, 2, 4, 64)
+const textGeometry = new THREE.TextBufferGeometry('Hello', 3)
+
+var buttons = document.getElementsByTagName("button");
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener("click", onButtonClick, false);
+};
 
 // Materials (skin)
 
@@ -32,8 +41,6 @@ material.color = new THREE.Color(0x1d98b2)
 // Mesh (ties together object and material)
 const plane = new THREE.Mesh(geometry1, material);
 scene.add(plane)
-const sphere = new THREE.Mesh(geometry2,material)
-scene.add(sphere)
 
 // const radius = gui.radius;
 
@@ -103,9 +110,40 @@ camera.position.set(0,-15,8); // Set position like this
 camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
 scene.add(camera)
 
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
+const sphere = new THREE.Mesh(sphereGeometry,material)
+const cone = new THREE.Mesh(coneGeometry,material)
+const box = new THREE.Mesh(boxGeometry,material)
+const cylinder = new THREE.Mesh(cylinderGeometry,material)
+const text = new THREE.Mesh(textGeometry,material)
+
+function onButtonClick(event) {
+    if(event.target.id == 'sphere')
+    {
+        scene.add(sphere)
+    }
+    else if(event.target.id == 'cone')
+    {
+        scene.add(cone)
+    }
+    else if(event.target.id == 'box')
+    {
+        scene.add(box)
+    }
+    else if(event.target.id == 'cylinder')
+    {
+        scene.add(cylinder)
+    }
+    else if(event.target.id == 'text')
+    {
+        scene.add(text)
+    }
+    else if(event.target.id == 'clear')
+    {
+        while (scene.children.length > 4) {
+            scene.remove(scene.children[scene.children.length - 1]);
+        }
+    }
+}
 
 /**
  * Renderer
@@ -150,6 +188,10 @@ let clicked = false
 var vec = new THREE.Vector3(); // create once and reuse
 var pos = new THREE.Vector3(); // create once and reuse
 
+function checkFunction() {
+    material.color = new THREE.Color(0xffffff)
+}
+
 function onDocumentMouseMove(event) {
     // mouseX = ( event.clientX / window.innerWidth ) * 2 - 1
     // mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1
@@ -180,6 +222,18 @@ const updateSphere = (event) => {
     }
 }
 
+const updateBox = (event) => {
+    if(clicked == false)
+    {
+        mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
+        mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
+    
+        box.position.x = mouseX
+        box.position.y = mouseY
+        box.position.z = 0
+    }
+}
+
 const clickSphere = (event) => {
     mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
     mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
@@ -197,8 +251,27 @@ const clickSphere = (event) => {
     clicked = true
 }
 
+const clickBox = (event) => {
+    mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
+    mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
+
+    console.log('x', mouseX)
+    console.log('y', mouseY)
+
+    if(clicked == false)
+    {    
+        box.position.x = mouseX
+        box.position.y = mouseY
+        box.position.z = 0
+    }
+
+    clicked = true
+}
+
 window.addEventListener('mousemove', updateSphere)
 window.addEventListener('click', clickSphere)
+window.addEventListener('mousemove', updateBox)
+window.addEventListener('click', clickBox)
 
 const clock = new THREE.Clock()
 

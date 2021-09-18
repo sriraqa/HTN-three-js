@@ -13,6 +13,39 @@ body
     background: rgba(234, 255, 254, 0);
 }
 
+.btn-group .button {
+    font-family: 'Open Sans';
+    font-family: 'Roboto';
+    background-color: #4CAF50; /* Green */
+    border: 1px solid green;
+    color: white;
+    text-align: center;
+    padding: 10px 22px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    width: 150px;
+
+    display: block;
+    position: relative;
+    left: 3%;
+    z-index: 99;
+  }
+  
+  .btn-group .button:not(:last-child) {
+    border-bottom: none; /* Prevent double borders */
+  }
+  
+  .btn-group .button:hover {
+    background-color: #3e8e41;
+  }
+
+  .button {
+    position: relative;
+    z-index: 99;
+    left: 3%;
+  }
+
 table {
     font-family: 'Open Sans';
     font-family: 'Roboto';

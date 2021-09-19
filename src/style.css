@@ -16,8 +16,8 @@ body
 .btn-group .button {
     font-family: 'Open Sans';
     font-family: 'Roboto';
-    background-color: #4CAF50; /* Green */
-    border: 1px solid green;
+    background-color: #056eb5;
+    border: 1px solid blue;
     color: white;
     text-align: center;
     padding: 10px 22px;
@@ -37,7 +37,7 @@ body
   }
   
   .btn-group .button:hover {
-    background-color: #3e8e41;
+    background-color: #0453a4;
   }
 
   .button {

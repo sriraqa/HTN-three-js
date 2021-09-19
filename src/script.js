@@ -72,7 +72,10 @@ const sizes = {
 
 const cuboidXLocation = [];
 const cuboidYLocation = [];
+let cuboidZHeight = [];
 var index1 = 0;
+
+let zPosition = 2;
 
 window.addEventListener('resize', () => {
     // Update sizes
@@ -136,18 +139,18 @@ function onButtonClick(event) {
         clickState = 1;
     }
     else if(event.target.id == 'clear') {
-        while (scene.children.length > 4) {
+        while (scene.children.length > 6) {
             scene.remove(scene.children[scene.children.length - 1]);
         }
         objOnScreen = false;
         clickState = 0;
         cuboidXLocation.length = 0;
         cuboidYLocation.length = 0;
+        cuboidZHeight.length = 0;
+        zPosition = 2;
         index1 = 0;
     }
 }
-
-let zPosition = 2;
 
 /**
  * Renderer
@@ -189,7 +192,6 @@ function checkFunction() {
 }
 
 // alert(scene.children[])
-let clicked = false
 
 document.addEventListener('mousemove', onDocumentMouseMove)
 
@@ -200,11 +202,11 @@ function onDocumentMouseMove(event) {
         mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
         mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
 
-        for(let i = 0; i < cuboidXLocation.length; i++)
+        for(let i = (cuboidXLocation.length - 1); i >= 0; i--)
         {
             if ((mouseX > (cuboidXLocation[i] - 2) && mouseX < (cuboidXLocation[i] + 2)) && (mouseY > (cuboidYLocation[i] - 2) && mouseY < (cuboidYLocation[i] + 2)))
             {
-                zPosition = 3;
+                zPosition = 2 + cuboidZHeight[i];
                 break;
             }
             else
@@ -232,12 +234,25 @@ function onDocumentClick(event) {
         cuboidYLocation[index1] = mouseY
         cuboidXLocation[index1++] = mouseX
 
+        if(zPosition > 2)
+        {
+            if(cuboidZHeight[scene.children.length - 7] == null)
+            {
+                cuboidZHeight[scene.children.length - 7] = 1;
+            }
+            cuboidZHeight[scene.children.length - 7] += (zPosition - 2);
+        }
+        else
+        {
+            cuboidZHeight[scene.children.length - 7] = 1;
+        }
+
         for(let i = 0; i < cuboidXLocation.length; i++){
             console.log(cuboidXLocation[i]);
-          }
-          for(let i = 0; i < cuboidYLocation.length; i++){
-            console.log(cuboidYLocation[i]);
-          }
+        }
+        for(let i = 0; i < cuboidYLocation.length; i++){
+        console.log(cuboidYLocation[i]);
+        }
  
         scene.children[scene.children.length - 1].position.x = mouseX
         scene.children[scene.children.length - 1].position.y = mouseY

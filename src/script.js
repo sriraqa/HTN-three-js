@@ -47,32 +47,20 @@ scene.add(plane)
 // Lights
 
 const pointLight = new THREE.PointLight(0xffffff, 2)
-pointLight.position.set(-20, -20, 50)
+pointLight.position.set(3.9, -10, 2.86)
 scene.add(pointLight)
 
 const pointLight2 = new THREE.PointLight(0xffffff, 2)
-pointLight2.position.set(50, 50, 50)
-pointLight2.intensity = 2
+pointLight2.position.set(-10, -8.46, 2.86)
 scene.add(pointLight2)
 
-// const light1 = gui.addFolder('Light 1')
+const pointLight3 = new THREE.PointLight(0xffffff, 2)
+pointLight3.position.set(10, -6.47, 4.45)
+scene.add(pointLight3) 
 
-// light1.add(pointLight2.position, 'y').min(-3).max(3).step(0.01)
-// light1.add(pointLight2.position, 'x').min(-6).max(6).step(0.01)
-// light1.add(pointLight2.position, 'z').min(-3).max(3).step(0.01)
-// light1.add(pointLight2, 'intensity').min(0).max(10).step(0.01)
-
-// const light1Color = {
-//     color: 0xffffff
-// }
-
-// light1.addColor(light1Color, 'color')
-//     .onChange(() => {
-//         pointLight2.color.set(light1Color.color)
-//     })
-
-// const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1)
-// scene.add(pointLightHelper)
+const pointLight4 = new THREE.PointLight(0xffffff, 2)
+pointLight4.position.set(0.37, 8.75, 2)
+scene.add(pointLight4)
 
 /**
  * Sizes
@@ -82,7 +70,9 @@ const sizes = {
     height: window.innerHeight
 }
 
-const cuboidLocation = []
+const cuboidXLocation = [];
+const cuboidYLocation = [];
+var index1 = 0;
 
 window.addEventListener('resize', () => {
     // Update sizes
@@ -151,7 +141,9 @@ function onButtonClick(event) {
         }
         objOnScreen = false;
         clickState = 0;
-        cuboidLocation = null;
+        cuboidXLocation.length = 0;
+        cuboidYLocation.length = 0;
+        index1 = 0;
     }
 }
 
@@ -208,17 +200,18 @@ function onDocumentMouseMove(event) {
         mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
         mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
 
-        for(var i = 0; i < (cuboidLocation.length - 2); i++)
+        for(let i = 0; i < cuboidXLocation.length; i++)
         {
-            if((mouseX > (cuboidLocation[i] - 2) && mouseX < (cuboidLocation[i] + 2)) || (mouseY > (cuboidLocation[i + 1] - 1.5) && mouseY < (cuboidLocation[i + 1] + 1.5)))
+            if ((mouseX > (cuboidXLocation[i] - 2) && mouseX < (cuboidXLocation[i] + 2)) && (mouseY > (cuboidYLocation[i] - 2) && mouseY < (cuboidYLocation[i] + 2)))
             {
-                        alert(cuboidLocation[0])
                 zPosition = 3;
+                break;
             }
             else
             {
                 zPosition = 2;
             }
+          
         }
     
         scene.children[scene.children.length - 1].position.x = mouseX
@@ -232,14 +225,19 @@ document.addEventListener('click', onDocumentClick)
 function onDocumentClick(event) {
     if(clickState == 2) //placed object on plane
     {
-        var index1 = 0;
-
         mouseX = ( event.clientX / window.innerWidth ) * 16 - 8
         mouseY = - ( event.clientY / window.innerHeight ) * 16 + 8
 
         // alert(mouseX + ', ' + mouseY)
-        cuboidLocation[index1++] = mouseY
-        cuboidLocation[index1++] = mouseX
+        cuboidYLocation[index1] = mouseY
+        cuboidXLocation[index1++] = mouseX
+
+        for(let i = 0; i < cuboidXLocation.length; i++){
+            console.log(cuboidXLocation[i]);
+          }
+          for(let i = 0; i < cuboidYLocation.length; i++){
+            console.log(cuboidYLocation[i]);
+          }
  
         scene.children[scene.children.length - 1].position.x = mouseX
         scene.children[scene.children.length - 1].position.y = mouseY
